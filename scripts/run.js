@@ -1,12 +1,24 @@
 const main = async () => {
+    // Contract owner account and a random person account
+    const [owner, randomPerson] = await hre.ethers.getSigners();
     const waveContractFactory = await hre.ethers.getContractFactory('WavePortal'); // compile the contract 
 
     // deploy the contract and wait 
     const waveContract = await waveContractFactory.deploy(); // fetch a local Eth blockchain
     await waveContract.deployed();
 
-    // Friendly log
+    // Friendly logs
     console.log("Contract deployed to:", waveContract.address);
+    console.log("Contract deployed by:", owner.address);
+
+
+    // TESTING WAVE COUNTS
+    await waveContract.getTotalWaves();
+    
+    let waveTxn = await waveContract.wave();
+    await waveTxn.wait();
+
+    await waveContract.getTotalWaves();
 };
 
 
